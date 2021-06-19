@@ -1,15 +1,99 @@
+# ===============================
+# SERVER CONFIG
+# ===============================
 server:
   port: 8080
+  error:
+    whitelabel:
+      enabled: false
 
 spring:
-  datasource:
-    url: jdbc:h2:mem:camunda
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
+  application:
+    name: base-project
+  main:
+    lazy-initialization: true
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+  # ===============================
+  # H2 DATABASE
+  # ===============================
   h2:
     console:
       enabled: true
       path: /h2-console
       settings:
         web-allow-others: true
+
+  datasource:
+    application:
+      url: jdbc:mysql://localhost:3306/base
+      username: root
+      password: 123456aA@
+      driverClassName: org.mariadb.jdbc.Driver
+
+    camunda:
+      jdbcUrl: jdbc:h2:mem:camunda
+      username: sa
+      password:
+      driverClassName: org.h2.Driver
+
+  # ===============================
+  # JPA / HIBERNATE
+  # ===============================
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: true
+
+# ===============================
+# CAMUNDA
+# ===============================
+camunda:
+  bpm:
+    auto-deployment-enabled: true
+
+# ===============================
+# SWAGGER V3
+# ===============================
+springdoc:
+  api-docs:
+    # Disabling the /v3/api-docs endpoint
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    # Disabling the swagger-ui
+    enabled: true
+
+# ===============================
+# LOGGING
+# ===============================
+logging:
+  level:
+    org:
+      springframework:
+        web: TRACE
+        ws:
+          client:
+            MessageTracing:
+              sent: TRACE
+              received: TRACE
+          server:
+            MessageTracing:
+              sent: TRACE
+              received: TRACE
+    root: INFO
+    org.hibernate.SQL: INFO
+  pattern:
+    console: "%d{dd-MM-yyyy HH:mm:ss.SSS} [%X{X-B3-TraceId},%X{X-B3-SpanId},%X{X-B3-ParentSpanId},%X{X-Span-Export}] [${spring.application.name}] %-5level [%thread] %logger{50}.%M - %msg%n"
+  file:
+    name: logs/default.log
