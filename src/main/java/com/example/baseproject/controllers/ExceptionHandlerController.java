@@ -56,6 +56,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     /**
+     * IllegalArgumentException sẽ được xử lý riêng tại đây
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public final ResponseEntity<Object> handleBaseMessageException(IllegalArgumentException ex, WebRequest request) {
+        logger.info("[ERROR] >>>> " + ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BaseResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()));
+    }
+
+    /**
      * NoHandlerFoundException sẽ được xử lý riêng tại đây
      */
     @Override

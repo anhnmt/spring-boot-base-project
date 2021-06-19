@@ -1,4 +1,4 @@
-package com.example.baseproject.configuration;
+package com.example.baseproject.configurations;
 
 import com.example.baseproject.common.utils.Constants;
 import io.swagger.v3.oas.models.Components;

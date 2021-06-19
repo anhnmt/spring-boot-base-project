@@ -1,6 +1,5 @@
 package com.example.baseproject.services.impl;
 
-import com.example.baseproject.common.exceptions.LogicException;
 import com.example.baseproject.common.utils.Constants;
 import com.example.baseproject.services.BpmService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import java.util.Map;
 public class BpmServiceImpl implements BpmService {
 
     protected static final String PROCESS_RETURN_SUCCESS = "true";
-
     private final HistoryService historyService;
     private final RuntimeService runtimeService;
 
@@ -37,16 +35,10 @@ public class BpmServiceImpl implements BpmService {
     }
 
     @Override
-    public void assertProcessSuccess(String processInstanceId) throws LogicException {
+    public void assertProcessSuccess(String processInstanceId) {
         HistoricVariableInstance result = getHistoricVariableByName(processInstanceId, Constants.VARIABLE_TASK.SUCCESS);
         HistoricVariableInstance message = getHistoricVariableByName(processInstanceId, Constants.VARIABLE_TASK.ERROR_MESSAGE);
-
-        try {
-            Assert.isTrue(PROCESS_RETURN_SUCCESS.equalsIgnoreCase(result.getValue().toString()), message.getValue().toString());
-        } catch (IllegalArgumentException ex) {
-            log.info(ex.getMessage(), ex);
-            throw new LogicException(ex.getMessage());
-        }
+        Assert.isTrue(PROCESS_RETURN_SUCCESS.equalsIgnoreCase(result.getValue().toString()), message.getValue().toString());
     }
 
 }

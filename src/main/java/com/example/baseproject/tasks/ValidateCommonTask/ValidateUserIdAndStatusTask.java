@@ -10,7 +10,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.springframework.stereotype.Component;
 
 import static com.example.baseproject.common.utils.DataUtils.getValueOrDefault;
-import static com.example.baseproject.common.utils.MessageUtils.getMessage;
 
 @Slf4j
 @Component
@@ -28,7 +27,7 @@ public class ValidateUserIdAndStatusTask extends ValidateTask {
         if (isExist) {
             setSuccess(execution);
         } else {
-            setError(execution, getMessage("user.error.notFound.userId"));
+            setError(execution, "user.error.notFound.userId");
         }
     }
 

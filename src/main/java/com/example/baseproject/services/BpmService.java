@@ -13,6 +13,6 @@ public interface BpmService {
 
     String startProcessInstanceByKey(String processName, Map<String, Object> variables);
 
-    void assertProcessSuccess(String processInstanceId) throws LogicException;
+    void assertProcessSuccess(String processInstanceId);
     
 }

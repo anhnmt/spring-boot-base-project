@@ -1,9 +1,11 @@
 package com.example.baseproject.configurations;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.camunda.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,19 +21,22 @@ import java.io.IOException;
 @Configuration
 @Import({SpringProcessEngineServicesConfiguration.class})
 public class CamundaDatasourceConfig {
-    @Bean("bpmDataSource")
+    @Bean
     @ConfigurationProperties("spring.datasource.camunda")
     public DataSource camundaDataSource() {
         return DataSourceBuilder.create().build();
     }
+    public HikariDataSource camundaDataSource(DataSourceProperties applicationDataSourceProperties) {
+        return applicationDataSourceProperties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+    }
 
-    @Bean("bpmTransactionManager")
-    public PlatformTransactionManager bpmTransactionManager(@Qualifier("bpmDataSource") DataSource bpmDataSource) {
+    @Bean
+    public PlatformTransactionManager bpmTransactionManager(@Qualifier("camundaDataSource") DataSource bpmDataSource) {
         return new DataSourceTransactionManager(bpmDataSource);
     }
 
     @Bean
-    public SpringProcessEngineConfiguration processEngineConfiguration(@Qualifier("bpmDataSource") DataSource bpmDataSource, @Qualifier("bpmTransactionManager") PlatformTransactionManager bpmTransactionManager, JobExecutor jobExecutor) throws IOException {
+    public SpringProcessEngineConfiguration processEngineConfiguration(@Qualifier("camundaDataSource") DataSource bpmDataSource, @Qualifier("bpmTransactionManager") PlatformTransactionManager bpmTransactionManager, JobExecutor jobExecutor) throws IOException {
         SpringProcessEngineConfiguration config = new SpringProcessEngineConfiguration();
         config.setDataSource(bpmDataSource);
         config.setTransactionManager(bpmTransactionManager);

@@ -1,4 +1,4 @@
-package com.example.baseproject.configuration;
+package com.example.baseproject.configurations;
 
 import com.example.baseproject.common.helpers.BloomFilterHelper;
 import com.google.common.base.Charsets;

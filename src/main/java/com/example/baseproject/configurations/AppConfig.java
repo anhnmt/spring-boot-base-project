@@ -1,4 +1,4 @@
-package com.example.baseproject.configuration;
+package com.example.baseproject.configurations;
 
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;

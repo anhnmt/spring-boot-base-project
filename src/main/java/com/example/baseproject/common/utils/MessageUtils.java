@@ -19,6 +19,7 @@ public class MessageUtils {
     public static String getMessage(String code, Locale locale, Object... args) {
         ResourceBundle resourceBundle = ResourceBundle.getBundle(BASE_NAME, locale);
         String message;
+
         try {
             message = resourceBundle.getString(code);
             message = MessageFormat.format(message, args);

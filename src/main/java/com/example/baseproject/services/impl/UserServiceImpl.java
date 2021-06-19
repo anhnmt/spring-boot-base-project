@@ -1,6 +1,5 @@
 package com.example.baseproject.services.impl;
 
-import com.example.baseproject.common.exceptions.LogicException;
 import com.example.baseproject.common.utils.Constants.BPM;
 import com.example.baseproject.common.utils.Constants.VARIABLE_TASK;
 import com.example.baseproject.domains.request.UserRequest;
@@ -29,25 +28,21 @@ public class UserServiceImpl implements UserService {
         var users = userRepository.findAll();
 
         if (ObjectUtils.isEmpty(users)) {
-            return Response.badRequest("Not found all users");
+            return Response.badRequest(getMessage("system.error.empty"));
         }
 
         return Response.ok(users);
     }
 
     @Override
-    public ResponseEntity<Object> create(UserRequest userRequest) throws LogicException {
+    public ResponseEntity<Object> create(UserRequest userRequest) {
         Map<String, Object> variables = new HashMap<>();
         variables.put(VARIABLE_TASK.SUCCESS, Boolean.FALSE);
         variables.put(VARIABLE_TASK.ERROR_MESSAGE, getMessage("system.error"));
         variables.put(VARIABLE_TASK.COMMAND, userRequest);
 
         String processInstanceId = bpmService.startProcessInstanceByKey(BPM.CREATE_NEW_USER, variables);
-        try {
-            bpmService.assertProcessSuccess(processInstanceId);
-        } catch (LogicException e) {
-            e.printStackTrace();
-        }
+        bpmService.assertProcessSuccess(processInstanceId);
 
         return Response.ok();
     }
