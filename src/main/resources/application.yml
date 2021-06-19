@@ -38,7 +38,7 @@ spring:
       driverClassName: org.mariadb.jdbc.Driver
 
     camunda:
-      jdbcUrl: jdbc:h2:mem:camunda
+      jdbcUrl: jdbc:h2:mem:camunda;DB_CLOSE_ON_EXIT=FALSE
       username: sa
       password:
       driverClassName: org.h2.Driver
@@ -61,6 +61,7 @@ spring:
 camunda:
   bpm:
     auto-deployment-enabled: true
+    history-level: audit
 
 # ===============================
 # SWAGGER V3

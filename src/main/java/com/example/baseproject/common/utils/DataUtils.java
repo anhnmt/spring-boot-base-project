@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.camunda.bpm.engine.variable.Variables;
+import org.camunda.bpm.engine.variable.value.StringValue;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -169,6 +171,22 @@ public class DataUtils {
             return null;
         }
         return mapper.readValue(json, classOutput);
+    }
+
+    public static StringValue objectToVariable(Object object) {
+        try {
+            return Variables.stringValue(objectToJson(object));
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
+
+    public static <T> T variableToObject(StringValue object, Class<T> classOutput) {
+        try {
+            return jsonToObject(object.getValue(), classOutput);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 }

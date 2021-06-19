@@ -1,6 +1,7 @@
 package com.example.baseproject.tasks.ValidateCommonTask;
 
-import com.example.baseproject.common.utils.Constants;
+import com.example.baseproject.common.utils.Constants.VARIABLE_TASK;
+import com.example.baseproject.common.utils.DataUtils;
 import com.example.baseproject.common.utils.Status;
 import com.example.baseproject.repositories.UserRepository;
 import com.example.baseproject.tasks.ValidateTask;
@@ -15,12 +16,13 @@ import static com.example.baseproject.common.utils.DataUtils.getValueOrDefault;
 @Component
 @RequiredArgsConstructor
 public class ValidateUserIdAndStatusTask extends ValidateTask {
+
     private final UserRepository userRepository;
 
     @Override
     public void execute(DelegateExecution execution) {
-        var userId = (Long) execution.getVariable(Constants.VARIABLE_TASK.USER_ID);
-        var status = (Long) execution.getVariable(Constants.VARIABLE_TASK.STATUS);
+        var userId = DataUtils.variableToObject(execution.getVariableTyped(VARIABLE_TASK.USER_ID), Long.class);
+        var status = DataUtils.variableToObject(execution.getVariableTyped(VARIABLE_TASK.STATUS), Long.class);
 
         var isExist = userRepository.existsByUserIdAndStatus(userId, getValueOrDefault(status, Status.ACTIVE.getLong()));
 

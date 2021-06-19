@@ -2,6 +2,7 @@ package com.example.baseproject.services.impl;
 
 import com.example.baseproject.common.utils.Constants.BPM;
 import com.example.baseproject.common.utils.Constants.VARIABLE_TASK;
+import com.example.baseproject.common.utils.DataUtils;
 import com.example.baseproject.domains.request.UserRequest;
 import com.example.baseproject.domains.response.Response;
 import com.example.baseproject.repositories.UserRepository;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> variables = new HashMap<>();
         variables.put(VARIABLE_TASK.SUCCESS, Boolean.FALSE);
         variables.put(VARIABLE_TASK.ERROR_MESSAGE, getMessage("system.error"));
-        variables.put(VARIABLE_TASK.COMMAND, userRequest);
+        variables.put(VARIABLE_TASK.COMMAND, DataUtils.objectToVariable(userRequest));
 
         String processInstanceId = bpmService.startProcessInstanceByKey(BPM.CREATE_NEW_USER, variables);
         bpmService.assertProcessSuccess(processInstanceId);
